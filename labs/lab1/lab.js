@@ -1,7 +1,7 @@
 'use strict';
 
-// EX 0:
-//  func(spring) => spng (if < 2 return empty)
+// # EX 0:
+// ## func(spring) => spng (if < 2 return empty)
 /*
 let readline = require("readline");
 let rl = readline.createInterface({
@@ -22,8 +22,8 @@ rl.on('line', (input) => {
     return;
 });
 */
-// EX 1:
-//  OOP for tasks objects using Functional Programming
+// # EX 1:
+// ## OOP for tasks objects using Functional Programming
 /*
 const dayjs = require("dayjs");
 const customParseFormat = require('dayjs/plugin/customParseFormat');
@@ -110,3 +110,6 @@ function main() {
 
 main();
 */
+
+// # EX2
+// ## sqlite
