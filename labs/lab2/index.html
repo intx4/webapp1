@@ -4,46 +4,120 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>ToDo Manager</title>
+
+    <!-- Custom CSS for this document -->
+    <link href="custom.css" rel="stylesheet">
 </head>
-<!-- This is the start of the navbar-->
-<nav class="navbar navbar-light" style="background-color: #498646;">
-    <!-- This is the brand. The ms-2 thingy is a shortend class for margin left. In particular, m is margin, s is start (so left) -->
-    <a class="navbar-brand ms-2" href="#">
-        <!-- This is the logo-->
-        <img src="/home/intx/Pictures/aot.jpg" alt="" width="30" height="24">
-        <strong style="color: wheat;">ToDos Task Manager</strong>
-    </a>
-    <!-- This is the search button-->
-    <div style="padding-right: 600px;">
-        <form class="d-inline-flex flex-row">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit" style="color: wheat; background-color: #568b53;">Search</button>
-        </form>
-    </div>
-    <div class="d-inline-flex">
-        <a class="navbar-brand me-2" href="#">
-            <img src="/home/intx/Pictures/aot.jpg" alt="" width="30" height="24">
-        </a>
-    </div>
-</nav>
 
 <body>
-    <h1>Hello, world!</h1>
 
-    <!-- Optional JavaScript; choose one of the two! -->
+    <!-- Navbar -->
+    <!-- navbar-expand-sm: expand the navbar for screen > small-->
+    <!-- bg-success: background color success, is dark green-->
+    <!-- fixed top: the position on the page-->
+    <nav class="navbar navbar-dark navbar-expand-sm bg-success fixed-top">
+        <!-- Toggle the left sidebar -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#left-sidebar" aria-controls="left-sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Logo and title -->
+        <a class="navbar-brand" href="index.html">
+            <svg class="bi bi-check-all" width="30" height="30" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M12.354 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
+                <path d="M6.25 8.043l-.896-.897a.5.5 0 10-.708.708l.897.896.707-.707zm1 2.414l.896.897a.5.5 0 00.708 0l7-7a.5.5 0 00-.708-.708L8.5 10.293l-.543-.543-.707.707z"/>
+            </svg> ToDo Manager
+        </a>
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <!-- Search form -->
+        <form class="form-inline my-2 my-lg-0 mx-auto d-none d-sm-block" action="#" role="search" aria-label="Quick search">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search query">
+        </form>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
+        <!-- Link to the user profile -->
+        <div class="navbar-nav ml-md-auto">
+            <a class="nav-item nav-link" href="#">
+                <svg class="bi bi-people-circle" width="30" height="30" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.468 12.37C12.758 11.226 11.195 10 8 10s-4.757 1.225-5.468 2.37A6.987 6.987 0 008 15a6.987 6.987 0 005.468-2.63z"/>
+                    <path fill-rule="evenodd" d="M8 9a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M8 1a7 7 0 100 14A7 7 0 008 1zM0 8a8 8 0 1116 0A8 8 0 010 8z" clip-rule="evenodd"/>
+                </svg>
+            </a>
+        </div>
+
+    </nav>
+
+    <!-- Content of the page -->
+    <div class="container-fluid">
+        <div class="row vheight-100">
+            <!-- Left sidebar -->
+            <aside class="collapse d-sm-block col-sm-4 col-12 bg-light below-nav" id="left-sidebar">
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action active">All</a>
+                    <a href="#" class="list-group-item list-group-item-action">Important</a>
+                    <a href="#" class="list-group-item list-group-item-action">Today</a>
+                    <a href="#" class="list-group-item list-group-item-action">Next 7 Days</a>
+                    <a href="#" class="list-group-item list-group-item-action">Private</a>
+                </div>
+
+
+            </aside>
+
+            <!-- Main content -->
+            <main class="col-sm-8 col-12 below-nav">
+                <h1>All</h1>
+
+                <!-- List of tasks -->
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="check-t1">
+                                <label class="custom-control-label" for="check-t1">Complete Lab 2</label>
+                            </div>
+                            <small>Monday 22 March 2021 at 14:30</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="check-t2">
+                                <label class="custom-control-label" for="check-t2">Buy some groceries</label>
+                            </div>
+                            <svg class="bi bi-person-square" width="1.2em" height="1.2em" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M14 1H2a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V2a1 1 0 00-1-1zM2 0a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V2a2 2 0 00-2-2H2z" clip-rule="evenodd"/>
+                  <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                </svg>
+                            <small>Today at 14:00</small>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="check-t3">
+                                <label class="custom-control-label important" for="check-t3">Read a good book!</label>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- Add a new task... -->
+                <button type="button" class="btn btn-lg btn-success fixed-right-bottom">&#43;</button>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+
 </body>
 
 </html>
