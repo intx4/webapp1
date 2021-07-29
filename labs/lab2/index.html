@@ -27,6 +27,9 @@
         </button>
         <!-- Logo and title -->
         <a class="navbar-brand" href="index.html">
+            <!--
+                See svg tag. The path is used basically to draw a figure
+            -->
             <svg class="bi bi-check-all" width="30" height="30" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M12.354 3.646a.5.5 0 010 .708l-7 7a.5.5 0 01-.708 0l-3.5-3.5a.5.5 0 11.708-.708L5 10.293l6.646-6.647a.5.5 0 01.708 0z" clip-rule="evenodd"/>
                 <path d="M6.25 8.043l-.896-.897a.5.5 0 10-.708.708l.897.896.707-.707zm1 2.414l.896.897a.5.5 0 00.708 0l7-7a.5.5 0 00-.708-.708L8.5 10.293l-.543-.543-.707.707z"/>
@@ -51,10 +54,15 @@
 
     </nav>
 
-    <!-- Content of the page -->
+    <!-- Content of the page. Use container-fluid as wrapper -->
     <div class="container-fluid">
+        <!--Important: use row as wrapper for col elements-->
         <div class="row vheight-100">
-            <!-- Left sidebar -->
+            <!-- Left sidebar 
+                d-sm-block: show for screen > sm (small)
+                col-sm-4 col-12: means that col is 4 for screen > sm, and it's 12 always. For the cascading of css this will result in being 12 only for screen = small
+
+            -->
             <aside class="collapse d-sm-block col-sm-4 col-12 bg-light below-nav" id="left-sidebar">
                 <div class="list-group list-group-flush">
                     <a href="#" class="list-group-item list-group-item-action active">All</a>
@@ -67,7 +75,9 @@
 
             </aside>
 
-            <!-- Main content -->
+            <!-- Main content
+                col-sm-8 col-12: 12 only for small, o/w is 8.    
+            -->
             <main class="col-sm-8 col-12 below-nav">
                 <h1>All</h1>
 
