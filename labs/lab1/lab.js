@@ -24,12 +24,12 @@ rl.on('line', (input) => {
 */
 // # EX 1:
 // ## OOP for tasks objects using Functional Programming
-/*
+
 const dayjs = require("dayjs");
 const customParseFormat = require('dayjs/plugin/customParseFormat');
 dayjs.extend(customParseFormat);
 const it = require('dayjs/locale/it');
-
+/*
 function Task(id, description, urgent = false, isPrivate = true, deadline = null) {
     //important, any declaration of attributes or methods must be this.x
     if (typeof id !== "number") {
@@ -110,6 +110,3 @@ function main() {
 
 main();
 */
-
-// # EX2
-// ## sqlite
