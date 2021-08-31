@@ -14,8 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include #import include
+from todomanager import views #import views
+from rest_framework import routers #import routers
+
+#register a new url for a backend endpoint
+router = routers.DefaultRouter()
+router.register(r'todos',  views.ToDoView, 'ToDos') # register a todos endpoint which will provide the ToDoView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls), #default
+    path('api/', include(router.urls)) #include into the api endpoint the urls registered in the router. I.e todos will be reacheable by api/todos. /api is the root view of the default router.
 ]

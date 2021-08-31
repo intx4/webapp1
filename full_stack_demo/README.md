@@ -26,3 +26,20 @@ At this point, we need to create a new migration and then apply it (specify the 
 - run the server and go to /admin endpoint.
 
 # 2. Setup APIs
+- `pipenv install djangorestframework django-cors-headers`
+- add corsheaders and restframework to the INSTALLED_APPS. Also add cors.middleware.Middleware to MIDDLEWARE.
+- add `CORS_ORIGIN_WHITELIST = [<React port>]` in `settings.py`.
+
+## 2.1 Serializers
+We need a serializers to serialize as Json the ToDo model in order to be used by the frontend.
+Create `serializers.py` inside todomanager and have a look.
+## 2.2 Views
+We need also to create a view. Have a look at `views.py`
+## 2.3 Urls
+We need to set up the urls now, in `backend/urls.py`
+
+# 3. Frontend
+- into `full-stack-demo`, `npx create-react-app frontend`
+- `cd frontend`, `npm start`
+- `npm install react-bootstrap@next bootstrap@5.1.0` to install react-bootstrap and vanilla bootstrap
+- add bootstrap to index.js `import 'bootstrap/dist/css/bootstrap.css';`
