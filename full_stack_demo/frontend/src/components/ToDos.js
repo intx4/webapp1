@@ -66,7 +66,7 @@ function ToDos(props){
   const taskComponents = tasks.map( (task) => {
     let classNome = "d-flex justify-content-evenly";
     if (task.important){
-        classNome += " important";
+        classNome+= " important";
     }
     return(
           <ListGroupItem as="li" key={task.id}>
