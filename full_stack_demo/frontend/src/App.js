@@ -1,6 +1,5 @@
 import './App.css';
 import React, { useState, useEffect} from 'react';
-
 //BootStrap react imports
 import Container from 'react-bootstrap/Container';
 import Collapse from 'react-bootstrap/Collapse';
@@ -14,6 +13,11 @@ import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ListGroupItem from 'react-bootstrap/esm/ListGroupItem';
+//Components
+import SideNavbar from './components/SideNavbar';
+import ToDos from './components/ToDos';
+import TASKS from './components/TASKS';
+import Modals from './components/Modals';
 
 //dayjs
 //import dayjs from 'dayjs';
@@ -22,119 +26,18 @@ const customParseFormat = require('dayjs/plugin/customParseFormat');
 dayjs.extend(customParseFormat);
 const it = require('dayjs/locale/it');
 
-
-// Fake Tasks
-const TASKS = [
-  { id: 1, description: "Complete BigLab 1C", important: false, isPrivate: true, deadline: dayjs("08-09-2021", "DD-MM-YYYY")},
-  { id: 2, description: "Study for BigLab 1C", important: true, isPrivate: true, deadline: dayjs("08-09-2022", "DD-MM-YYYY")},
-  { id: 3, description: "Buy some groceries", important: false, isPrivate: false, deadline: dayjs("08-09-2022", "DD-MM-YYYY")},
-  { id: 4, description: "Read a good book", important: true, isPrivate: true, deadline: null},
-  { id: 5, description: "Watch Mr. Robot", important: false, isPrivate: true, deadline: dayjs("08-09-2021", "DD-MM-YYYY")},
-  { id: 6, description: "Buy some flowers", important: true, isPrivate: false, deadline: dayjs() }, // today task
-  { id: 7, description: "Football match", important: true, isPrivate: false, deadline: dayjs().add(4, 'day') }, // next 7 days task
-];
-
 // Helpers-------------------------------------------------------------------------------------
-function formatDate(date){
-  if (date === null){
-    return "---O---";
-  }
-  return date.format("DD/MM/YYYY");
-}
-function dateDiff(date) {
-  if (date === null){
-    return 1000;
-  }
-  let now = dayjs();
-  return date.diff(now, 'day');
-}
-// Component Handling the Filters
-function SideNavbar(props){
-
-  //handle the activation of filter
-  const filters = ["All", "Important", "Private", "Today", "Next7"];
-  const filterComponents = filters.map((filter) => {
-    let isActive = filter === props.filter? true: false;
-    return(
-      <ListGroup.Item as="li" key={filter} id={filter} action active={isActive}
-        onClick={() => {
-          props.setFilter(filter);
-        }}>{filter}</ListGroup.Item>
-    )
-  });
-
-  return(
-    <aside>
-      <Col sm={true} className="d-sm-block bg-light">
-        <Collapse in={props.show}>
-          <div id="collapseSideBar">
-            <ListGroup as="ul" id="filterList" variant="flush">
-              {filterComponents}
-            </ListGroup>
-          </div>
-        </Collapse>
-      </Col>
-    </aside>
-  );
-}
-// Component Listing the ToDos
-function ToDos(props){
-  //map every array element to a ListGroup.Item component
-  const filterTasks = () => {
-    if (props.filter === "All"){
-      return TASKS.filter((t) => t.isPrivate === false);
-    }
-    else if (props.filter === "Important"){
-      return TASKS.filter((t) => t.important === true && t.isPrivate === false);
-    }
-    else if (props.filter === "Private"){
-      return TASKS.filter((t) => t.isPrivate === true);
-    }
-    else if (props.filter === "Today"){
-      return TASKS.filter((t) => (dateDiff(t.deadline) <= 1 && t.isPrivate === false)
-      );
-    }
-    else if (props.filter === "Next7"){
-      return TASKS.filter((t) => (dateDiff(t.deadline) <= 7 && t.isPrivate === false)
-      );
-    }
-  }
-  const tasks = filterTasks();
-  const taskComponents = tasks.map( (task) => {
-    let classNome = "d-flex justify-content-evenly";
-    if (task.important){
-      classNome += " important";
-    }
-    return(
-      <ListGroupItem as="li" key={task.id}>
-        <Container className={classNome}>
-        <Button className="btn btn-success fixed-right-bottom" type="submit">Edit</Button>
-        <Button className="btn btn-danger fixed-right-bottom" type="submit">Delete</Button>
-        {task.description}
-        <small> Date: {formatDate(task.deadline)}</small>
-        </Container>
-      </ListGroupItem>
-    );
-  });
-  //include the array of components into the ListGroup
-  return (
-    <Col sm={true}>
-      <ListGroup as="ul">
-        {taskComponents}
-      </ListGroup>
-    </Col>
-  );
-
-}
-
 function App() {
-    const [show, setShow] = useState(true); // show controls sidenavbar
+    const [showSide, setShowSide] = useState(true); // show controls sidenavbar
     const [filter, setFilter] = useState("All"); //active filter 
+    const [showModal, setShowModal] = useState(false); //show Modal
+    const [whichModal, setWhichModal] = useState("");//type of Modal
+    const [task, setTask] = useState(null); //target task 
 
     let sideBarWidth = 4;
     let tasksWidth = 8;
 
-    if(!show){
+    if(!showSide){
       sideBarWidth = 0;
       tasksWidth = 12;
     }
@@ -144,7 +47,7 @@ function App() {
             <Navbar bg="success" expand="sm" variant="dark">
                 <Container fluid>
                     {/* Toggle Button for SideNB*/}
-                    <Button onClick={() => setShow(!show)} aria-controls="collapseSideBar" aria-expanded={show} className="btn btn-success">
+                    <Button onClick={() => setShowSide(!showSide)} aria-controls="collapseSideBar" aria-expanded={showSide} className="btn btn-success">
                          <span className="navbar-toggler-icon"></span>
                     </Button>
                     <Navbar.Brand href="#home">
@@ -181,18 +84,24 @@ function App() {
                 <Row className="d-flex flex-row">
                   {/* Side NB */}
                   <Col sm={sideBarWidth}>
-                    <SideNavbar show={show} filter={filter} setFilter={setFilter}/>
+                    <SideNavbar show={showSide} filter={filter} setFilter={setFilter}/>
                   </Col>
                   {/* ToDos */}
                   <Col sm={tasksWidth}>
-                    <ToDos show={show} filter={filter}/>
+                    <ToDos show={showSide} filter={filter} TASKS={TASKS} setShow={setShowModal} setModal={setWhichModal} setTask={setTask}/>
                   </Col>
                 </Row>
             </Container>
-
+            {/* Add new Task Button*/}
             <Container className="d-flex flex-row-reverse pt-5 mt-5 me-5 pe-5">
-                <Button className="btn btn-success fixed-right-bottom" type="submit">+</Button>
+                <Button className="btn btn-success fixed-right-bottom" type="submit" onClick={() => {
+                  setShowModal(true);
+                  setWhichModal("Add");
+                  }}>+</Button>
             </Container>
+
+            {/* Modal for CRUD */}
+            <Modals show={showModal} setShow={setShowModal} type={whichModal} task={task}/>
         </div>
     );
 }
