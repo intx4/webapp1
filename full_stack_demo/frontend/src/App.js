@@ -13,27 +13,42 @@ import Button from 'react-bootstrap/Button';
 import ListGroup from 'react-bootstrap/ListGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ListGroupItem from 'react-bootstrap/esm/ListGroupItem';
+import 'whatwg-fetch';
 //Components
 import SideNavbar from './components/SideNavbar';
 import ToDos from './components/ToDos';
-import TASKS from './components/TASKS';
+//import TASKS from './components/TASKS';
 import Modals from './components/Modals';
 
-//dayjs
-//import dayjs from 'dayjs';
-const dayjs = require("dayjs");
-const customParseFormat = require('dayjs/plugin/customParseFormat');
-dayjs.extend(customParseFormat);
-const it = require('dayjs/locale/it');
 
-// Helpers-------------------------------------------------------------------------------------
 function App() {
-    const [showSide, setShowSide] = useState(true); // show controls sidenavbar
+    const [showSide, setShowSide] = useState(true); //show controls sidenavbar
     const [filter, setFilter] = useState("All"); //active filter 
     const [showModal, setShowModal] = useState(false); //show Modal
     const [whichModal, setWhichModal] = useState("");//type of Modal
-    const [task, setTask] = useState(null); //target task 
+    const [task, setTask] = useState([{id: -1, description:"", important: false, isPrivate: false, deadline: ""}]); //target task, to be passed to modal
+    const [TASKS,setTASKS] = useState([]); //list of tasks
 
+    // refresh the list
+    const refresh = async function () {
+      const res = await fetch('/api/todos/?format=json');
+      res.json().then((data) => {
+        setTASKS(data);
+      });
+    }
+
+    //new id for task to add
+    const getNewId = () => {
+        let id = 1;
+        TASKS.forEach(t => {
+            if (t.id > id){
+                id = t.id;
+            }
+        });
+        return id;
+    }
+        
+    // this is to make the tasks take all the available space...maybe there's a better way to do it
     let sideBarWidth = 4;
     let tasksWidth = 8;
 
@@ -41,6 +56,9 @@ function App() {
       sideBarWidth = 0;
       tasksWidth = 12;
     }
+
+    // on every change of ShowModal => refresh.( None = every time. Empty = on mount)
+    useEffect(function () {refresh();},[showModal]);
     return ( 
         <div className = "App" >
             {/* NavBar */}
@@ -88,7 +106,8 @@ function App() {
                   </Col>
                   {/* ToDos */}
                   <Col sm={tasksWidth}>
-                    <ToDos show={showSide} filter={filter} TASKS={TASKS} setShow={setShowModal} setModal={setWhichModal} setTask={setTask}/>
+                    <ToDos show={showSide} filter={filter} TASKS={TASKS} setShow={setShowModal} 
+                      setModal={setWhichModal} setTask={setTask}/>
                   </Col>
                 </Row>
             </Container>
@@ -97,11 +116,14 @@ function App() {
                 <Button className="btn btn-success fixed-right-bottom" type="submit" onClick={() => {
                   setShowModal(true);
                   setWhichModal("Add");
+                  setTask([{id : getNewId(), description:"", important: false, isPrivate: false, deadline: ""}]);
                   }}>+</Button>
             </Container>
 
             {/* Modal for CRUD */}
-            <Modals show={showModal} setShow={setShowModal} type={whichModal} task={task}/>
+            {/* Cool trick: instead of having the Modal laying here and deal with the transition from one state to another and props always chaning
+                , just recreate it on the fly with the new props becoming the state*/}
+            {showModal?(<Modals show={showModal} setShow={setShowModal} type={whichModal} task={task} refresh={refresh}/>):null}
         </div>
     );
 }

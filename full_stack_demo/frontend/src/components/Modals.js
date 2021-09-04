@@ -19,22 +19,64 @@ import ModalTitle from 'react-bootstrap/ModalTitle';
 import ModalHeader from 'react-bootstrap/ModalHeader';
 import ModalBody from 'react-bootstrap/ModalBody';
 import ModalFooter from 'react-bootstrap/ModalFooter';
-import dayjs from 'dayjs';
+import 'whatwg-fetch';
 
+//dayjs
+//import dayjs from 'dayjs';
+const dayjs = require("dayjs");
+const customParseFormat = require('dayjs/plugin/customParseFormat');
+dayjs.extend(customParseFormat);
+const it = require('dayjs/locale/it');
+
+
+//Helpers----------------------------------------------------------
+function formatDate(date){
+  if (date === null){
+    return "---O---";
+  }
+  return date.format("DD/MM/YYYY");
+}
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken');
+/* Component that handles the modals for CRUD ops
+  props:
+    show => show modal
+    setShow => handle show
+    type => which operation
+    task => target task
+    refresh => toggle the refresh of task lists
+  */
 export default class Modals extends Component {
   constructor(props){
     super(props);
-    this.setState(props.task);
+    this.state = props.task;
   }
   render() {
     const props = this.props;
+
     let title = "";
 
+    //change of form
     const handleChange = (event) => {
-      let description = "";
-      let deadline = null;
-      let important = false;
-      let isPrivate = false;
+      let description = this.state[0].description;
+      let deadline = this.state[0].deadline;
+      let important = this.state[0].important;
+      let isPrivate = this.state[0].isPrivate;
 
       if (event.target.label === "Important"){
         important = true;  
@@ -46,19 +88,48 @@ export default class Modals extends Component {
         description = event.target.value;
       }
       if (event.target.placeholder === "DD-MM-YYYY"){
-        deadline = dayjs(event.target.value, "DD-MM-YYYY", "it");
+        deadline = event.target.value;
       }
-      let task = {description: description, important: important, isPrivate: isPrivate, deadline: deadline};
+      let task = [{id: this.state[0].id, description: description, important: important, isPrivate: isPrivate, deadline: deadline}];
       this.setState(task);
+    }
+
+    //submit
+    const handleSubmit = (event) => {
+      let content = this.state[0]; //it appears it's an array
+      if(event.target.id === "modal-add"){
+        fetch('/api/todos/', {
+          method: 'POST',
+          body: JSON.stringify(content),
+          headers: {'Content-Type': 'application/json','X-CSRFToken': `${csrftoken}`}
+        }).then(res => alert("New Task Added"+JSON.stringify(content))).catch(err => alert(`Something wrong: ${err}`));
+      }
+      else if(event.target.id === "modal-edit"){
+        fetch(`api/todos/${content.id}`, {
+          method: 'UPDATE',
+          body: JSON.stringify(content),
+          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`}
+        }).then(res => alert("Successfully updated")).catch(err => alert(`Something wrong: ${err}`));
+      }
+      else if (event.target.id === "modal-delete"){
+        fetch(`api/todos/${content.id}`, {
+          method: 'DELETE',
+          body: JSON.stringify(content),
+          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`}
+        }).then(res => alert("Successfully deleted")).catch(err => alert(`Something wrong: ${err}`));
+      }
+      props.setShow(false); //close modal
     }
 
     if (props.type === "Add"){
       title = "New Task";
     }
-    else if (props.type === "Edit"){
+    if (props.type === "Edit"){
       title = "Edit";
     }
-    else if (props.type === "Delete"){
+    let id = title === "Edit"? "modal-edit":"modal-add";
+    
+    if (props.type === "Delete"){
       return(
         <Modal show={props.show} onHide={() => props.setShow(false)}>
         <ModalHeader closeButton>
@@ -70,6 +141,8 @@ export default class Modals extends Component {
         <ModalFooter>
                 <Button
                   className="btn btn-danger"
+                  id = "modal-delete"
+                  onClick = {handleSubmit}
                 >
                   Delete
                 </Button>
@@ -94,19 +167,21 @@ export default class Modals extends Component {
 
                 <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                   <Form.Label>Deadline</Form.Label>
-                  <Form.Control as="textarea" rows={1} placeholder="DD-MM-YYYY" value={this.state.deadline} onChange={handleChange}/>
+                  <Form.Control type="date" placeholder="DD-MM-YYYY" value={this.dateBuffer} onChange={handleChange}/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                  <Form.Check type="checkbox" label="Important" value={this.state.important} onChange={handleChange}/>
+                  <Form.Check type="checkbox" label="Important" value={props.task.important} onChange={handleChange}/>
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                  <Form.Check type="checkbox" label="Private" value={this.state.isPrivate} onChange={handleChange}/>
+                  <Form.Check type="checkbox" label="Private" value={props.task.isPrivate} onChange={handleChange}/>
                 </Form.Group>
                 </Form>
               </ModalBody>
               <ModalFooter>
                 <Button
-                  color="primary" 
+                  color="primary"
+                  id={id}
+                  onClick = {handleSubmit} 
                 >
                   Save
                 </Button>

@@ -6,7 +6,7 @@ from .models import ToDo
 
 class ToDoAdmin(admin.ModelAdmin):
     #list_display is a default field which will contain the fields of the model to display in the admin panel
-    list_display = ('title', 'description', 'urgent', 'date')
+    list_display = ('id', 'description', 'important','isPrivate', 'deadline')
 
 admin.site.register(ToDo, ToDoAdmin)
 

@@ -28,18 +28,33 @@ function formatDate(date){
     if (date === null){
       return "---O---";
     }
+    if (typeof date === "string"){
+      return date;
+    }
     return date.format("DD/MM/YYYY");
 }
 function dateDiff(date) {
   if (date === null){
     return 1000;
   }
+  if (typeof date === "string"){
+    date = dayjs(date, "DD-MM-YYYY", "it");
+  }
   let now = dayjs();
   return date.diff(now, 'day');
 }
 
-// Component Listing the ToDos
+/* Component Listing the ToDos
+    props:
+        show = can it take all the space
+        filter = active filter
+        TASKS 
+        setShow = to be passed to the buttons to show modals
+        setModal = which type of modal to show
+        setTask = set the active Task
+*/
 function ToDos(props){
+
 
   //map every array element to a ListGroup.Item component
   const filterTasks = () => {
@@ -61,7 +76,8 @@ function ToDos(props){
         );
     }
   }
-  const tasks = filterTasks();
+  let tasks = filterTasks()
+  const getTask = (id) => tasks.filter((t) => t.id === id);
   
   const taskComponents = tasks.map( (task) => {
     let classNome = "d-flex justify-content-evenly";
@@ -74,12 +90,12 @@ function ToDos(props){
           <Button className="btn btn-success fixed-right-bottom" type="submit" onClick={() =>{
               props.setShow(true);
               props.setModal("Edit");
-              props.setTask(task);
+              props.setTask(getTask(task.id));
             }}>Edit</Button>
           <Button className="btn btn-danger fixed-right-bottom" type="submit"  onClick={() => {
               props.setShow(true);
               props.setModal("Delete");
-              props.setTask(task);
+              props.setTask(getTask(task.id));
             }}>Delete</Button>
           {task.description}
           <small> Date: {formatDate(task.deadline)}</small>
