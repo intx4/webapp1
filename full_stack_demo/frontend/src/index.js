@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css'; //import bootstrap
 import './index.css';
 import App from './App';
+import 'whatwg-fetch';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(

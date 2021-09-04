@@ -23,7 +23,12 @@ const customParseFormat = require('dayjs/plugin/customParseFormat');
 dayjs.extend(customParseFormat);
 const it = require('dayjs/locale/it');
  
-// Component Handling the Filters
+/*Component Handling the Filters
+    props:
+        show -> is it visible
+        filter -> active filter
+        setFilter -> set active filter
+*/
 function SideNavbar(props){
  
    //handle the activation of filter
