@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include #import include
-from todomanager import views #import views
+from todomanager.views import ToDoView #import views
 from rest_framework import routers #import routers
+from rest_framework.authtoken import views
 
 #register a new url for a backend endpoint
 router = routers.DefaultRouter()
-router.register(r'todos',  views.ToDoView, 'ToDos') # register a todos endpoint which will provide the ToDoView
+router.register(r'todos', ToDoView, 'ToDos') # register a todos endpoint which will provide the ToDoView
 
 urlpatterns = [
     path('admin/', admin.site.urls), #default
-    path('api/', include(router.urls)) #include into the api endpoint the urls registered in the router. I.e todos will be reacheable by api/todos. /api is the root view of the default router.
+    path('api/', include(router.urls)), #include into the api endpoint the urls registered in the router. I.e todos will be reacheable by api/todos. /api is the root view of the default router.
+    path('api-token-auth/', views.obtain_auth_token) #default auth api with tokens
 ]

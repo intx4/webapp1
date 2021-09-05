@@ -43,3 +43,15 @@ We need to set up the urls now, in `backend/urls.py`
 - `cd frontend`, `npm start`
 - `npm install react-bootstrap@next bootstrap@5.1.0` to install react-bootstrap and vanilla bootstrap
 - add bootstrap to index.js `import 'bootstrap/dist/css/bootstrap.css';`
+- Look App.js and the src/components!
+
+# 4. CORS
+- remember to use the X-Cors header when you do POST, UPDATE or DELETE requests to backend! Just take the value from the cookie
+
+# 5. Authentication using tokens
+- add `'rest_framework.authtoken'` to the INSTALLED APPS and `REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  
+    ],
+}`
+- add `path('api-token-auth/', views.obtain_auth_token)` in urls.py. Will provide an api for requesting a token using username and pw.

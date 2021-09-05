@@ -37,11 +37,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'todomanager', #my app
-    #for APIs
+    # my app
+    'todomanager', 
+    # for APIs
     'rest_framework',
     'corsheaders',
+    # for auth
+    'rest_framework.authtoken',
 ]
+# for auth
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -21,21 +21,7 @@ import ModalBody from 'react-bootstrap/ModalBody';
 import ModalFooter from 'react-bootstrap/ModalFooter';
 import 'whatwg-fetch';
 
-//dayjs
-//import dayjs from 'dayjs';
-const dayjs = require("dayjs");
-const customParseFormat = require('dayjs/plugin/customParseFormat');
-dayjs.extend(customParseFormat);
-const it = require('dayjs/locale/it');
-
-
 //Helpers----------------------------------------------------------
-function formatDate(date){
-  if (date === null){
-    return "---O---";
-  }
-  return date.format("DD/MM/YYYY");
-}
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
@@ -68,7 +54,7 @@ export default class Modals extends Component {
   }
   render() {
     const props = this.props;
-
+    const token = this.props.token;
     let title = "";
 
     //change of form
@@ -101,21 +87,21 @@ export default class Modals extends Component {
         fetch('/api/todos/', {
           method: 'POST',
           body: JSON.stringify(content),
-          headers: {'Content-Type': 'application/json','X-CSRFToken': `${csrftoken}`}
+          headers: {'Content-Type': 'application/json','X-CSRFToken': `${csrftoken}`, "Authorization": "token:"+token}
         }).then(res => alert("New Task Added"+JSON.stringify(content))).catch(err => alert(`Something wrong: ${err}`));
       }
       else if(event.target.id === "modal-edit"){
         fetch(`api/todos/${content.id}`, {
           method: 'UPDATE',
           body: JSON.stringify(content),
-          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`}
+          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`, "Authorization": "token:"+token}
         }).then(res => alert("Successfully updated")).catch(err => alert(`Something wrong: ${err}`));
       }
       else if (event.target.id === "modal-delete"){
         fetch(`api/todos/${content.id}`, {
           method: 'DELETE',
           body: JSON.stringify(content),
-          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`}
+          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`, "Authorization": "token:"+token}
         }).then(res => alert("Successfully deleted")).catch(err => alert(`Something wrong: ${err}`));
       }
       props.setShow(false); //close modal
