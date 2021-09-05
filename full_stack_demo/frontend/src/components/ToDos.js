@@ -76,7 +76,10 @@ function ToDos(props){
         );
     }
   }
-  let tasks = filterTasks()
+  let tasks = filterTasks();
+  if (!tasks){
+    return(<></>);
+  }
   const getTask = (id) => tasks.filter((t) => t.id === id);
   
   const taskComponents = tasks.map( (task) => {

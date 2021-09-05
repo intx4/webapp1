@@ -2,7 +2,6 @@ import './App.css';
 import React, { useState, useEffect} from 'react';
 //BootStrap react imports
 import Container from 'react-bootstrap/Container';
-import Collapse from 'react-bootstrap/Collapse';
 import Navbar from 'react-bootstrap/Navbar';
 import NavLink from 'react-bootstrap/NavLink';
 import Row from 'react-bootstrap/Row';
@@ -10,16 +9,15 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import FormControl from 'react-bootstrap/FormControl';
 import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import ListGroupItem from 'react-bootstrap/esm/ListGroupItem';
 import 'whatwg-fetch';
 //Components
 import SideNavbar from './components/SideNavbar';
 import ToDos from './components/ToDos';
 //import TASKS from './components/TASKS';
 import Modals from './components/Modals';
-
+import Login from './components/Login.js';
+import useToken from './components/Token';
 
 function App() {
     const [showSide, setShowSide] = useState(true); //show controls sidenavbar
@@ -28,15 +26,18 @@ function App() {
     const [whichModal, setWhichModal] = useState("");//type of Modal
     const [task, setTask] = useState([{id: -1, description:"", important: false, isPrivate: false, deadline: ""}]); //target task, to be passed to modal
     const [TASKS,setTASKS] = useState([]); //list of tasks
+    const {token, setToken} = useToken(); //use the component useToken, it will handle storing the token on local storage
 
     // refresh the list
     const refresh = async function () {
-      const res = await fetch('/api/todos/?format=json');
-      res.json().then((data) => {
-        setTASKS(data);
-      });
-    }
-
+        const res = await fetch('http://localhost:8000/api/todos/?format=json', {
+            method: 'GET',
+            headers:{"Authorization": "token:"+JSON.stringify(token)}
+        });
+        res.json().then((data) => {
+          setTASKS(data);
+        }).catch();
+      }
     //new id for task to add
     const getNewId = () => {
         let id = 1;
@@ -47,7 +48,18 @@ function App() {
         });
         return id;
     }
-        
+    
+    // on every change of ShowModal => refresh.( None = every time. Empty = on mount)
+    useEffect(function () {
+        if(token){
+            refresh();
+        }
+    },[showModal]);
+
+    if (!token){
+        return(<Login setToken={setToken}/>);
+    }
+
     // this is to make the tasks take all the available space...maybe there's a better way to do it
     let sideBarWidth = 4;
     let tasksWidth = 8;
@@ -56,9 +68,6 @@ function App() {
       sideBarWidth = 0;
       tasksWidth = 12;
     }
-
-    // on every change of ShowModal => refresh.( None = every time. Empty = on mount)
-    useEffect(function () {refresh();},[showModal]);
     return ( 
         <div className = "App" >
             {/* NavBar */}
@@ -123,7 +132,7 @@ function App() {
             {/* Modal for CRUD */}
             {/* Cool trick: instead of having the Modal laying here and deal with the transition from one state to another and props always chaning
                 , just recreate it on the fly with the new props becoming the state*/}
-            {showModal?(<Modals show={showModal} setShow={setShowModal} type={whichModal} task={task} refresh={refresh}/>):null}
+            {showModal?(<Modals token={JSON.stringify(token)} show={showModal} setShow={setShowModal} type={whichModal} task={task} refresh={refresh}/>):null}
         </div>
     );
 }
