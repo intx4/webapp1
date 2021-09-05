@@ -2,13 +2,11 @@ from django.shortcuts import render
 from rest_framework import viewsets #handy class from rest framework to create views
 from .models import ToDo
 from .serializers import ToDoSerializer
-#token auth requested
-from rest_framework.permissions import IsAuthenticated  
+#token auth requested 
 from rest_framework.authentication import TokenAuthentication
 # Create your views here.
 class ToDoView(viewsets.ModelViewSet):
 
-    permission_classes = (IsAuthenticated,)
     authentication_classes = (TokenAuthentication,)
 
     queryset = ToDo.objects.all() # the target objects of the actions

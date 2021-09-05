@@ -87,21 +87,21 @@ export default class Modals extends Component {
         fetch('/api/todos/', {
           method: 'POST',
           body: JSON.stringify(content),
-          headers: {'Content-Type': 'application/json','X-CSRFToken': `${csrftoken}`, "Authorization": "token:"+token}
+          headers: {'Content-Type': 'application/json','X-CSRFToken': `${csrftoken}`, "Authorization": "Token:"+token}
         }).then(res => alert("New Task Added"+JSON.stringify(content))).catch(err => alert(`Something wrong: ${err}`));
       }
       else if(event.target.id === "modal-edit"){
         fetch(`api/todos/${content.id}`, {
           method: 'UPDATE',
           body: JSON.stringify(content),
-          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`, "Authorization": "token:"+token}
+          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`, "Authorization": "Token:"+token}
         }).then(res => alert("Successfully updated")).catch(err => alert(`Something wrong: ${err}`));
       }
       else if (event.target.id === "modal-delete"){
         fetch(`api/todos/${content.id}`, {
           method: 'DELETE',
           body: JSON.stringify(content),
-          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`, "Authorization": "token:"+token}
+          headers: {'Content-Type': 'application/json', 'X-CSRFToken': `${csrftoken}`, "Authorization": "Token:"+token}
         }).then(res => alert("Successfully deleted")).catch(err => alert(`Something wrong: ${err}`));
       }
       props.setShow(false); //close modal

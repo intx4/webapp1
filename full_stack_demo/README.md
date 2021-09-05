@@ -55,3 +55,6 @@ We need to set up the urls now, in `backend/urls.py`
     ],
 }`
 - add `path('api-token-auth/', views.obtain_auth_token)` in urls.py. Will provide an api for requesting a token using username and pw.
+
+- in order to protect the view ToDo, add `permission_classes=(TokenAuthentication,)`
+- now after logging in as admin,admin for example, we can store the token and use it in all requests as the header `Authorization: Token: <token>`

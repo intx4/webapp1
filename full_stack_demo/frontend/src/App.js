@@ -20,19 +20,18 @@ import Login from './components/Login.js';
 import useToken from './components/Token';
 
 function App() {
+    const {token, setToken} = useToken(); //use the component useToken, it will handle storing the token on local storage
     const [showSide, setShowSide] = useState(true); //show controls sidenavbar
     const [filter, setFilter] = useState("All"); //active filter 
     const [showModal, setShowModal] = useState(false); //show Modal
     const [whichModal, setWhichModal] = useState("");//type of Modal
     const [task, setTask] = useState([{id: -1, description:"", important: false, isPrivate: false, deadline: ""}]); //target task, to be passed to modal
     const [TASKS,setTASKS] = useState([]); //list of tasks
-    const {token, setToken} = useToken(); //use the component useToken, it will handle storing the token on local storage
-
     // refresh the list
     const refresh = async function () {
         const res = await fetch('http://localhost:8000/api/todos/?format=json', {
             method: 'GET',
-            headers:{"Authorization": "token:"+JSON.stringify(token)}
+            headers:{"Authorization": "Token:"+JSON.stringify(token)}
         });
         res.json().then((data) => {
           setTASKS(data);
